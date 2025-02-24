@@ -10,7 +10,7 @@ public class BookshareApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BookshareApplication.class, args);
 		
-		System.out.println("Welocme to the book world ");
+		System.out.println("Welocme to the book worlD");
 	}
 
 }
