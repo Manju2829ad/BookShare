@@ -14,7 +14,7 @@ public class LoginDTO {
     
     
     // @JsonIgnore
-@JsonProperty("username")
+    @JsonProperty("emailOrMobileNumber")
  private  String emailOrMobileNumber;
 
 
