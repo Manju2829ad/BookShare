@@ -7,14 +7,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 public class UserDTO{
 
+
+    public UserDTO(String emailOrMobileNumber) {
+        //TODO Auto-generated constructor stub
+    }
 
     @JsonProperty("user_id")
 	private Long id;
@@ -41,6 +47,12 @@ public class UserDTO{
 	
     @JsonProperty("user_pincode")
 	private Long pincode;
+
+    @Override
+    public String toString() {
+        return "UserDTO [id=" + id + ", mobileNumber=" + mobileNumber + ", email=" + email + ", password=" + password
+                + ", role=" + role + ", age=" + age + ", address=" + address + ", pincode=" + pincode + "]";
+    }
 
 
 

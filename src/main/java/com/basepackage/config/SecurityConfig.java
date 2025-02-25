@@ -38,6 +38,7 @@ public class SecurityConfig {
 		return provider;
 	}
 	
+	
 
 // ... existing code ...
 @Bean

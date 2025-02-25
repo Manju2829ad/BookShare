@@ -9,6 +9,8 @@ import com.basepackage.entityMapper.EntityDTOMapper;
 import com.basepackage.model.User;
 import com.basepackage.repo.UserRepo;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserService {
 
@@ -22,14 +24,20 @@ public class UserService {
 	
 	
 	
-
+@Transactional
 	public UserDTO saveUser(UserDTO user) {
 
 		System.out.println("saveUser method called");
 
 		System.out.println(user.getAge());
 
-		    User userEntity= entityDTOMapper.DtoToEntity(user,User.class);
+		User userEntity = entityDTOMapper.DtoToEntity(user, User.class);
+		System.out.println("Mapped User Entity: " + userEntity);  // Debugging
+		
+		if (userEntity == null) {
+			throw new RuntimeException("Entity mapping failed!");
+		}
+		
 		userEntity.setPassword(encoder.encode(userEntity.getPassword()));
 
 		    
@@ -70,6 +78,8 @@ public boolean isMobileNumberExist(UserDTO userDTO) {
     // Check if the mobile number exists in the database
     return repo.findByMobileNumber(mobileNumber).isPresent();
 }
+
+
 
 
 }
