@@ -1,5 +1,7 @@
 package com.basepackage.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
@@ -44,17 +46,26 @@ public class SecurityConfig {
 @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     System.out.println("Hello");
+    
     http.csrf(customizer -> customizer.disable())
-        .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())) // Enabling CORS
+        .cors(cors -> cors.configurationSource(request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedOrigins(List.of("https://bookshare-c0b33.web.app")); // Allow frontend domain
+            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow these HTTP methods
+            config.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Allow necessary headers
+            config.setAllowCredentials(true); // Allow credentials (important for JWT tokens)
+            return config;
+        }))
         .authorizeHttpRequests(request -> request
-            .requestMatchers("/api/auth/register", "/api/auth/login", "/api/user/**") // Ensure signup is permitted
-            .permitAll() // Allow access to signup and login without JWT
+            .requestMatchers("/api/auth/register", "/api/auth/login", "/api/user/**")
+            .permitAll()
             .anyRequest().authenticated())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Keep JWT filter for other requests
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
 }
+
 // ... existing code ...
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
